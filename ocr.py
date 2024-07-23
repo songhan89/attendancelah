@@ -25,6 +25,11 @@ def process_text_to_dataframe(text):
 # Streamlit app title
 st.title("OCR Attendance Helper")
 
+# Add a small introduction
+st.write("This app helps extract text from an image (e.g., attendance list) and process it to create a list of attendees.")
+# Build by
+st.write("Built by [Wong Songhan](https://github.com/songhan89)")
+
 # Upload image
 uploaded_image = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
 
@@ -42,16 +47,14 @@ if uploaded_image is not None:
     # Count the total number of attendees
     total_attendees = name_df.shape[0]
     
-    # Display the dataframe and total number of attendees
-    st.write("Extracted DataFrame:")
-    st.dataframe(name_df)
-    st.write(f'Total number of attendees: {total_attendees}')
-    
     # Additional processing
-    name_df['Name_v2'] = name_df['Name'].str.replace("""\(NEA\)""", "").str.title()
-    name_df['Name_v2'] = name_df['Name_v2'].str[:-1]
+    name_df['Skype'] = name_df['Name']
+    name_df['Name'] = name_df['Name'].str.replace(""" (NEA)""", "").str.title()
     name_df = name_df.drop_duplicates(subset=['Name'], keep='last')
-    
+
+    # Display the dataframe and total number of attendees
+    st.write(f'Total number of attendees: {total_attendees}')
+
     # Display the processed dataframe
     st.write("Processed DataFrame:")
     st.dataframe(name_df)
