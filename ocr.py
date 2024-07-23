@@ -34,9 +34,12 @@ st.write("Built by [Wong Songhan](https://github.com/songhan89)")
 uploaded_image = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
 
 if uploaded_image is not None:
-    # Display the uploaded image
+    # Display the uploaded image as a link
+    # image_url = uploaded_image.name
+    # st.markdown(f"[Uploaded Image]({image_url})")
+
+    # Process the uploaded image
     image = Image.open(uploaded_image)
-    st.image(image, caption='Uploaded Image', use_column_width=True)
     
     # Extract text from the image
     extracted_text = extract_text_from_image(image)
@@ -52,16 +55,20 @@ if uploaded_image is not None:
     name_df['Name'] = name_df['Name'].str.replace(""" (NEA)""", "").str.title()
     name_df = name_df.drop_duplicates(subset=['Name'], keep='last')
 
-    # Display the dataframe and total number of attendees
-    st.write(f'Total number of attendees: {total_attendees}')
+    # Create two columns
+    col1, col2 = st.columns(2)
 
-    # Display the processed dataframe
-    st.write("Processed DataFrame:")
-    st.dataframe(name_df)
+    st.title("Result")
+
+    # Display the dataframe and total number of attendees in the first column
+    with col1:
+        st.write(f'Total number of attendees: {total_attendees}')
+        st.write("Processed DataFrame:")
+        st.dataframe(name_df)
     
-    # Export the dataframe to a CSV file if needed
-    csv = name_df.to_csv(index=False)
-    st.download_button(label="Download CSV", data=csv, file_name='attendees_list.csv', mime='text/csv')
+    # Export the dataframe to a CSV file in the second column
+    with col2:
+        csv = name_df.to_csv(index=False)
+        st.download_button(label="Download CSV", data=csv, file_name='attendees_list.csv', mime='text/csv')
 
 # To run the app, use the command: streamlit run your_script_name.py
-
