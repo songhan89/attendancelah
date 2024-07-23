@@ -55,20 +55,17 @@ if uploaded_image is not None:
     name_df['Name'] = name_df['Name'].str.replace(""" (NEA)""", "").str.title()
     name_df = name_df.drop_duplicates(subset=['Name'], keep='last')
 
-    # Create two columns
-    col1, col2 = st.columns(2)
-
     st.title("Result")
+    # Create two columns
+
 
     # Display the dataframe and total number of attendees in the first column
-    with col1:
-        st.write(f'Total number of attendees: {total_attendees}')
-        st.write("Processed DataFrame:")
-        st.dataframe(name_df)
+    st.write(f'Total number of attendees: {total_attendees}')
+    st.write("Processed DataFrame:")
+    st.dataframe(name_df)
     
     # Export the dataframe to a CSV file in the second column
-    with col2:
-        csv = name_df.to_csv(index=False)
-        st.download_button(label="Download CSV", data=csv, file_name='attendees_list.csv', mime='text/csv')
+    csv = name_df.to_csv(index=False)
+    st.download_button(label="Download CSV", data=csv, file_name='attendees_list.csv', mime='text/csv')
 
 # To run the app, use the command: streamlit run your_script_name.py
